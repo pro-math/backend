@@ -1,0 +1,26 @@
+[project]
+name = "backend"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "ITSDENISSKA", email = "fotiev.d1991@gmail.com"},
+]
+dependencies = [
+    "fastapi>=0.110.2",
+    "uvicorn[standart]>=0.29.0",
+    "python-multipart>=0.0.9",
+    "pydantic[standart]>=2.7.1",
+    "pyjwt>=2.8.0",
+    "passlib[bcrypt]>=1.7.4",
+]
+requires-python = ">=3.12"
+readme = "README.md"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+
+[tool.pdm]
+distribution = true
