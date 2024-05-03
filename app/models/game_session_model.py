@@ -1,8 +1,6 @@
 import datetime
 from enum import Enum
-
 from pydantic import BaseModel, field_validator
-
 
 class Token(BaseModel):
     access_token: str
@@ -30,7 +28,6 @@ class MathOperation(str, Enum):
     minus = "minus"
     multiplication = "multiplication"
     division = "division"
-
 
 class GameSession(BaseModel):
     game_mode: GameMode
