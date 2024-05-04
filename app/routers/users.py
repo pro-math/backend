@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.utils.models import User
+from app.schemas import User
 
 users_router = APIRouter(prefix="/users", tags=["Users"])
 
@@ -24,5 +24,3 @@ async def delete_user_by_user_id(user_id: int) -> dict[str, str]:
 
 @users_router.put("/{user_id}")
 async def update_user_by_user_id(user_id: int) -> User: ...
-
-
