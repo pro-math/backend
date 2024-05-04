@@ -1,14 +1,20 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 
-from app.data import settings
+from app.models import db_helper, Base
 from app.routers.game_sessions import game_sessions_router
 from app.routers.users import users_router
 
-SECRET_KEY = settings.jwt_settings.secret_key
-ALGORITHM = settings.jwt_settings.algorithm
-ACCESS_TOKEN_EXPIRE_MINUTES = settings.jwt_settings.access_token_expire_minutes
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    async with db_helper.engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
 
 app.include_router(
     users_router,
