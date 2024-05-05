@@ -1,9 +1,25 @@
-import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
-class User(BaseModel):
+class UserBase(BaseModel):
     username: str
     email: str
     hashed_password: str
-    create_at: datetime.datetime
+
+
+class UserCreate(UserBase): ...
+
+
+class UserUpdate(UserCreate): ...
+
+
+class UserUpdatePartial(UserCreate):
+    username: str | None = None
+    email: str | None = None
+    hashed_password: str | None = None
+
+
+class User(UserBase):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
