@@ -1,3 +1,8 @@
-__all__ = ("User",)
+__all__ = (
+    "User",
+    "UserCreate",
+    "UserUpdate",
+    "UserUpdatePartial",
+)
 
-from app.schemas.user_schemas import User
+from app.schemas.user_schemas import User, UserCreate, UserUpdate, UserUpdatePartial
