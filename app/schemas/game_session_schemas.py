@@ -3,22 +3,6 @@ from enum import Enum
 from pydantic import BaseModel, field_validator
 
 
-class Token(BaseModel):
-    access_token: str
-    token_type: str
-
-
-class TokenData(BaseModel):
-    username: str
-
-
-class User(BaseModel):
-    username: str
-    email: str
-    hashed_password: str
-    create_at: datetime.datetime
-
-
 class GameMode(str, Enum):
     time_mode = "time"
     count_mode = "count"
