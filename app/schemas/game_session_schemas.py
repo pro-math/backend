@@ -1,41 +1,31 @@
-import datetime
-from enum import Enum
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, ConfigDict
+
+from app.schemas import GameMode
 
 
-class GameMode(str, Enum):
-    time_mode = "time"
-    count_mode = "count"
-
-
-class MathOperation(str, Enum):
-    plus = "plus"
-    minus = "minus"
-    multiplication = "multiplication"
-    division = "division"
-
-
-class GameSession(BaseModel):
+class GameSessionBase(BaseModel):
     game_mode: GameMode
-    duration: datetime.timedelta
-    math_operations: list[MathOperation]
     examples_category: int
-    examples: list[dict[str, str]]
     total_count: int
     correct_count: int
-    create_at: datetime.datetime
+    user_id: int
 
-    @field_validator("examples")
-    def check_examples(cls, v):
-        for example in v:
-            if not {"example_text", "answer_users", "answer_correct"} <= example.keys():
-                raise ValueError(
-                    "Each example dictionary must contain 'example_text', 'answer_correct' and 'answer_users'"
-                )
-        return v
 
-    @field_validator("examples_category")
-    def check_examples_category(cls, v):
-        if v % 10 != 0:
-            raise ValueError("examples_category must be divisible by 10")
-        return v
+class GameSessionCreate(GameSessionBase): ...
+
+
+class GameSessionUpdate(GameSessionCreate): ...
+
+
+class GameSessionUpdatePartial(GameSessionCreate):
+    game_mode: GameMode | None = None
+    examples_category: int | None = None
+    total_count: int | None = None
+    correct_count: int | None = None
+    user_id: int | None = None
+
+
+class GameSession(GameSessionBase):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
