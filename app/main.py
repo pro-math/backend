@@ -3,8 +3,8 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from app.models import db_helper, Base
-from app.routers.game_sessions import game_sessions_router
-from app.routers.users import users_router
+from app.views.game_sessions_views import game_sessions_router
+from app.views.users_views import users_router
 
 
 @asynccontextmanager
