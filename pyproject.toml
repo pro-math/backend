@@ -10,8 +10,6 @@ dependencies = [
     "uvicorn[standart]>=0.29.0",
     "python-multipart>=0.0.9",
     "pydantic[standart]>=2.7.1",
-    "pyjwt>=2.8.0",
-    "passlib[bcrypt]>=1.7.4",
     "pydantic-settings>=2.2.1",
     "sqlalchemy[asyncio]>=2.0.29",
     "psycopg2-binary==2.9.5",
