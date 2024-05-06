@@ -1,5 +1,3 @@
-__all__ = {
-    "settings",
-}
+__all__ = ("settings",)
 
 from app.data.config import settings
