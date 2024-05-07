@@ -10,5 +10,6 @@ if TYPE_CHECKING:
 
 class User(Base):
     username: Mapped[str]
+    hashed_password: Mapped[bytes]
 
     game_sessions: Mapped[list["GameSession"]] = relationship(back_populates="user")
