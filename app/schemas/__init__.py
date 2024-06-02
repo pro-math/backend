@@ -8,7 +8,6 @@ __all__ = (
     "GameSessionCreate",
     "GameSessionUpdate",
     "GameSessionUpdatePartial",
-    "Token",
 )
 
 from app.schemas.user_schemas import User, UserCreate, UserUpdate, UserUpdatePartial
@@ -19,4 +18,3 @@ from app.schemas.game_session_schemas import (
     GameSessionUpdate,
     GameSessionUpdatePartial,
 )
-from app.schemas.token_schemas import Token
