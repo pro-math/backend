@@ -2,8 +2,8 @@ from sqlalchemy import select
 from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models import GameSession
-from app.schemas import GameSessionCreate, GameSessionUpdate, GameSessionUpdatePartial
+from src.models import GameSession
+from src.schemas import GameSessionCreate, GameSessionUpdate, GameSessionUpdatePartial
 
 
 async def get_game_sessions(session: AsyncSession) -> list[GameSession]:

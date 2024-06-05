@@ -2,10 +2,10 @@ from typing import TYPE_CHECKING
 
 from sqlalchemy.orm import Mapped, relationship, mapped_column
 
-from app.models.base import Base
+from src.models.base import Base
 
 if TYPE_CHECKING:
-    from app.models import GameSession
+    from src.models import GameSession
 
 
 class User(Base):

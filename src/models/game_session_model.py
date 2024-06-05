@@ -4,10 +4,10 @@ from typing import TYPE_CHECKING
 from sqlalchemy import ForeignKey, DateTime, JSON, Integer, ARRAY, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.models import Base
+from src.models import Base
 
 if TYPE_CHECKING:
-    from app.models import User
+    from src.models import User
 
 
 class GameSession(Base):

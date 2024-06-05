@@ -2,12 +2,12 @@ from fastapi import APIRouter, Depends, status, HTTPException
 from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.cruds import user_crud
-from app.dependencies.user_dependencies import user_by_id
-from app.models import db_helper
-from app.schemas import User, UserCreate, UserUpdate, UserUpdatePartial
-from app.schemas.user_schemas import Token
-from app.utils.auth import create_jwt_token, verify_jwt_token, oauth2_scheme
+from src.cruds import user_crud
+from src.dependencies.user_dependencies import user_by_id
+from src.models import db_helper
+from src.schemas import User, UserCreate, UserUpdate, UserUpdatePartial
+from src.schemas.user_schemas import Token, AuthenticationData
+from src.utils.auth import create_jwt_token, verify_jwt_token, oauth2_scheme
 
 users_router = APIRouter(prefix="/users", tags=["Users"])
 
@@ -96,10 +96,11 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
     status_code=status.HTTP_201_CREATED,
 )
 async def register_user(
-    username: str,
-    password: str,
+    authentication_data: AuthenticationData,
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ) -> dict[str, str]:
+    username = authentication_data.username
+    password = authentication_data.password
     hashed_password = pwd_context.hash(password)
     user_in = UserCreate(
         username=username,
@@ -113,10 +114,11 @@ async def register_user(
 
 @users_router.post("/token")
 async def authenticate_user(
-    username: str,
-    password: str,
+    authentication_data: AuthenticationData,
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ) -> Token:
+    username = authentication_data.username
+    password = authentication_data.password
     user = await user_crud.get_user_by_username(session=session, username=username)
     print(user)
     if not user:

@@ -1,14 +1,14 @@
 from typing import Annotated
 
-from app.models.user_model import User
+from src.models.user_model import User
 
 from fastapi import Path, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
-from app.cruds import user_crud
-from app.models import db_helper
-from app.schemas import User
+from src.cruds import user_crud
+from src.models import db_helper
+from src.schemas import User
 
 
 async def user_by_id(

@@ -1,16 +1,16 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.cruds import game_session_crud
-from app.dependencies.game_session_dependencies import game_session_by_id
-from app.models import db_helper
-from app.schemas import (
+from src.cruds import game_session_crud
+from src.dependencies.game_session_dependencies import game_session_by_id
+from src.models import db_helper
+from src.schemas import (
     GameSession,
     GameSessionCreate,
     GameSessionUpdate,
     GameSessionUpdatePartial,
 )
-from app.views.users_views import oauth2_scheme
+from src.views.users_views import oauth2_scheme
 
 game_sessions_router = APIRouter(prefix="/game_sessions", tags=["Game sessions"])
 

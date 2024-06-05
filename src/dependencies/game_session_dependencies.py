@@ -3,9 +3,9 @@ from typing import Annotated
 from fastapi import Path, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.cruds import game_session_crud
-from app.models import db_helper
-from app.schemas import GameSession
+from src.cruds import game_session_crud
+from src.models import db_helper
+from src.schemas import GameSession
 
 
 async def game_session_by_id(
