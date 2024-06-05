@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from app.schemas import GameMode
 
@@ -14,7 +14,6 @@ class GameSessionBase(BaseModel):
     examples: dict
     total_count: int
     correct_count: int
-    user_id: int
 
 
 class GameSessionCreate(GameSessionBase):
@@ -33,12 +32,10 @@ class GameSessionUpdatePartial(BaseModel):
     examples: Optional[dict] = None
     total_count: Optional[int] = None
     correct_count: Optional[int] = None
-    user_id: Optional[int] = None
 
 
 class GameSession(GameSessionBase):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     created_at: datetime
-
-    class Config:
-        orm_mode = True
