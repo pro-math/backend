@@ -54,6 +54,7 @@ async def update_rating(
             examples_category=game_session.examples_category,
             game_session_id=game_session.id,
             user_id=user_id,
+            correct_count=game_session.correct_count,
         )
         session.add(new_rating)
 
