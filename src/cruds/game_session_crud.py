@@ -13,6 +13,19 @@ async def get_game_sessions(session: AsyncSession) -> list[GameSession]:
     return list(game_sessions)
 
 
+async def get_users_game_sessions(
+    session: AsyncSession, user_id: int
+) -> list[GameSession]:
+    stmt = (
+        select(GameSession)
+        .order_by(GameSession.id)
+        .where(GameSession.user_id == user_id)
+    )
+    result: Result = await session.execute(stmt)
+    game_sessions = result.scalars().all()
+    return list(game_sessions)
+
+
 async def get_game_session(
     session: AsyncSession,
     game_session_id: int,
@@ -22,9 +35,13 @@ async def get_game_session(
 
 async def create_game_session(
     session: AsyncSession,
+    user_id: int,
     game_session_in: GameSessionCreate,
 ) -> GameSession:
-    game_session = GameSession(**game_session_in.model_dump())
+    game_session = GameSession(
+        **game_session_in.model_dump(),
+        user_id=user_id,
+    )
     session.add(game_session)
     await session.commit()
     await session.refresh(game_session)
