@@ -5,7 +5,7 @@ from fastapi.security import OAuth2PasswordBearer
 
 from src.data import settings
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/users/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/users/token", scheme_name="JWT")
 
 
 def create_jwt_token(data: dict):
@@ -20,7 +20,6 @@ def verify_jwt_token(token: str) -> dict:
         decoded_data = jwt.decode(
             token, settings.secret_key, algorithms=[settings.algorithm]
         )
-        print(decoded_data)
         return decoded_data
     except jwt.PyJWTError:
         return None

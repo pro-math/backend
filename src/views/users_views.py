@@ -120,7 +120,6 @@ async def authenticate_user(
     username = authentication_data.username
     password = authentication_data.password
     user = await user_crud.get_user_by_username(session=session, username=username)
-    print(user)
     if not user:
         raise HTTPException(status_code=400, detail="Incorrect username or password")
 
