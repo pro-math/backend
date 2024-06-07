@@ -80,7 +80,10 @@ async def get_ratings(
             RatingModel.math_operations.contains(math_operations),
         )
         .order_by(
-            RatingModel.duration
+            (
+                RatingModel.correct_count / RatingModel.game_session.total_count,
+                RatingModel.duration,
+            )
             if game_mode == GameMode.count_mode
             else RatingModel.correct_count.desc()
         )

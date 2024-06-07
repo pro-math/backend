@@ -39,7 +39,11 @@ async def update_rating(
 
     if rating:
         if game_session.game_mode == GameMode.count_mode:
-            if game_session.duration < rating.duration:
+            if (
+                game_session.correct_count / game_session.total_count
+                > rating.correct_count / rating.game_session.total_count
+                and game_session.duration < rating.duration
+            ):
                 rating.duration = game_session.duration
                 rating.game_session_id = game_session.id
         elif game_session.game_mode == GameMode.time_mode:
