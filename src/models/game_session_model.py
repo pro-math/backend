@@ -14,15 +14,15 @@ if TYPE_CHECKING:
 class GameSession(Base):
     __tablename__ = "game_sessions"
 
-    game_mode: Mapped[str] = mapped_column(nullable=False)
-    duration: Mapped[int] = mapped_column(nullable=False)
+    game_mode: Mapped[str]
+    duration: Mapped[int]
     math_operations: Mapped[list[OperationType]] = mapped_column(
         EnumArray, nullable=False
     )
-    examples_category: Mapped[int] = mapped_column(nullable=False)
+    examples_category: Mapped[int]
     examples: Mapped[dict] = mapped_column(JSON, nullable=False)
-    total_count: Mapped[int] = mapped_column(nullable=False)
-    correct_count: Mapped[int] = mapped_column(nullable=False)
+    total_count: Mapped[int]
+    correct_count: Mapped[int]
     created_at = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)

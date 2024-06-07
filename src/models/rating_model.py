@@ -12,19 +12,19 @@ if TYPE_CHECKING:
 
 
 class Rating(Base):
-    game_mode: Mapped[str] = mapped_column(nullable=False)
-    duration: Mapped[int] = mapped_column(nullable=False)
+    game_mode: Mapped[str]
+    duration: Mapped[int]
     math_operations: Mapped[list[OperationType]] = mapped_column(
         EnumArray, nullable=False
     )
-    examples_category: Mapped[int] = mapped_column(nullable=False)
-    correct_count: Mapped[int] = mapped_column(nullable=False)
+    examples_category: Mapped[int]
+    correct_count: Mapped[int]
 
     game_session_id: Mapped[int] = mapped_column(
         ForeignKey("game_sessions.id"), nullable=False
     )
     game_session: Mapped["GameSession"] = relationship(
-        "GameSession", back_populates="rating"
+        "GameSession", back_populates="rating", lazy="joined"
     )
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
-    user: Mapped["User"] = relationship("User", back_populates="ratings")
+    user: Mapped["User"] = relationship("User", back_populates="ratings", lazy="joined")
