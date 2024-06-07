@@ -5,8 +5,10 @@ __all__ = (
     "db_helper",
     "GameSession",
     "Rating",
+    "Achievement",
 )
 
+from src.models.achievement_model import Achievement
 from src.models.rating_model import Rating
 from src.models.base import Base
 from src.models.db_helper import DatabaseHelper, db_helper
