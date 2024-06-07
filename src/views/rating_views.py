@@ -7,7 +7,7 @@ from sqlalchemy.orm import joinedload
 from starlette.exceptions import HTTPException
 
 from src.models import db_helper, Rating as RatingModel, GameSession as GameSessionModel
-from src.schemas import GameMode, RatingResponse, OperationType
+from src.schemas import GameMode, Rating, OperationType
 from src.utils.auth import oauth2_scheme, verify_jwt_token
 
 ratings_router = APIRouter(prefix="/ratings", tags=["Ratings"])
@@ -22,7 +22,7 @@ async def get_users_ratings(
     offset: int = 0,
     token: str = Depends(oauth2_scheme),
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
-) -> list[RatingResponse]:
+) -> list[Rating]:
     decoded_data = verify_jwt_token(token)
     if not decoded_data:
         raise HTTPException(status_code=400, detail="Invalid token")
@@ -49,7 +49,7 @@ async def get_users_ratings(
     ratings = result.scalars().all()
 
     return [
-        RatingResponse(
+        Rating(
             game_mode=rating.game_mode,
             duration=rating.duration,
             math_operations=rating.math_operations,
@@ -70,33 +70,33 @@ async def get_ratings(
     limit: int = 10,
     offset: int = 0,
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
-) -> list[RatingResponse]:
+) -> list[Rating]:
     query = (
         select(RatingModel)
+        .join(RatingModel.game_session)
         .options(joinedload(RatingModel.user))
         .where(
             RatingModel.game_mode == game_mode,
             RatingModel.examples_category == examples_category,
-            RatingModel.math_operations.contains(math_operations),
+            RatingModel.math_operations == math_operations,
         )
         .order_by(
-            (
-                RatingModel.correct_count / RatingModel.game_session.total_count,
-                RatingModel.duration,
-            )
+            RatingModel.correct_count / GameSessionModel.total_count
             if game_mode == GameMode.count_mode
-            else RatingModel.correct_count.desc()
+            else RatingModel.correct_count.desc(),
+            RatingModel.duration.desc()
+            if game_mode == GameMode.count_mode
+            else RatingModel.correct_count.desc(),
         )
         .limit(limit)
         .offset(offset)
     )
 
-    # Execute the query and fetch results
     result = await session.execute(query)
-    ratings = result.scalars().all()
+    ratings = result.unique().scalars().all()
 
     return [
-        RatingResponse(
+        Rating(
             game_mode=rating.game_mode,
             duration=rating.duration,
             math_operations=rating.math_operations,
@@ -104,6 +104,9 @@ async def get_ratings(
             user_id=rating.user_id,
             created_at=rating.game_session.created_at,
             game_session_id=rating.game_session_id,
+            total_count=rating.game_session.total_count,
+            correct_count=rating.game_session.correct_count,
+            username=rating.user.username,
         )
         for rating in ratings
     ]
