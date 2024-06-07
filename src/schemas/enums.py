@@ -1,6 +1,7 @@
 from enum import Enum
 
-from sqlalchemy import TypeDecorator, ARRAY, String
+from sqlalchemy import TypeDecorator, String
+from sqlalchemy.dialects.postgresql import ARRAY
 
 
 class GameMode(str, Enum):
