@@ -9,11 +9,11 @@ __all__ = (
     "GameSessionUpdate",
     "GameSessionUpdatePartial",
     "OperationType",
-    "RatingResponse",
+    "Rating",
 )
 
 from src.schemas.rating_schemas import (
-    RatingResponse,
+    Rating,
 )
 from src.schemas.user_schemas import User, UserCreate, UserUpdate, UserUpdatePartial
 from src.schemas.enums import GameMode, OperationType
