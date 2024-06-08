@@ -6,6 +6,7 @@ from starlette.middleware.cors import CORSMiddleware
 from src.views.game_sessions_views import game_sessions_router
 from src.views.users_views import users_router
 from src.views.rating_views import ratings_router
+from src.views.achievements_view import achievements_router
 
 
 @asynccontextmanager
@@ -32,4 +33,7 @@ app.include_router(
 )
 app.include_router(
     ratings_router,
+)
+app.include_router(
+    achievements_router,
 )
