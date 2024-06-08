@@ -11,8 +11,10 @@ __all__ = (
     "OperationType",
     "Rating",
     "Achievement",
+    "Chart",
 )
 
+from src.schemas.chart_schemas import Chart
 from src.schemas.achievements_schemas import Achievement
 from src.schemas.rating_schemas import (
     Rating,

@@ -7,6 +7,7 @@ from src.views.game_sessions_views import game_sessions_router
 from src.views.users_views import users_router
 from src.views.rating_views import ratings_router
 from src.views.achievements_view import achievements_router
+from src.views.chart_view import charts_router
 
 
 @asynccontextmanager
@@ -24,7 +25,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 app.include_router(
     users_router,
 )
@@ -36,4 +36,7 @@ app.include_router(
 )
 app.include_router(
     achievements_router,
+)
+app.include_router(
+    charts_router,
 )
