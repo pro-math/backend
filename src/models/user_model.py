@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING
 
-from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, relationship, mapped_column
 
+from src.models.achievement_model import user_achievements_table
 from src.models.base import Base
 
 if TYPE_CHECKING:
@@ -15,9 +15,10 @@ class User(Base):
     is_superuser: Mapped[bool] = mapped_column(default=False)
     hashed_password: Mapped[str]
 
-    achievements_ids: Mapped[list[int]] = mapped_column(
-        ForeignKey("achievements.id"), nullable=True
+    achievements: Mapped[list["Achievement"]] = relationship(
+        secondary=user_achievements_table,
+        back_populates="users",
+        lazy="joined",
     )
-    achievements: Mapped[list["Achievement"]] = relationship()
     game_sessions: Mapped[list["GameSession"]] = relationship(back_populates="user")
     ratings: Mapped[list["Rating"]] = relationship(back_populates="user", lazy="joined")
