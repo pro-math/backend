@@ -3,26 +3,13 @@ from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.cruds import user_crud
-from src.dependencies.user_dependencies import user_by_id
+from src.dependencies.user_dependencies import user_by_id, get_current_user
 from src.models import db_helper
 from src.schemas import User, UserCreate, UserUpdate, UserUpdatePartial
 from src.schemas.user_schemas import Token, AuthenticationData
-from src.utils.auth import create_jwt_token, verify_jwt_token, oauth2_scheme
+from src.utils.auth import create_jwt_token, oauth2_scheme, verify_jwt_token
 
 users_router = APIRouter(prefix="/users", tags=["Users"])
-
-
-async def get_current_user(
-    token: str = Depends(oauth2_scheme),
-    session: AsyncSession = Depends(db_helper.scoped_session_dependency),
-) -> User | None:
-    decoded_data = verify_jwt_token(token)
-    if not decoded_data:
-        raise HTTPException(status_code=400, detail="Invalid token")
-    user = await user_crud.get_user(session=session, user_id=decoded_data["sub"])
-    if not user:
-        raise HTTPException(status_code=400, detail="User not found")
-    return user
 
 
 @users_router.get("/me/")
@@ -45,14 +32,18 @@ async def get_user(
 
 
 @users_router.delete(
-    "/{user_id}/",
+    "/me/",
     status_code=status.HTTP_204_NO_CONTENT,
 )
 async def delete_user(
     token: str = Depends(oauth2_scheme),
-    user: User = Depends(user_by_id),
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ) -> None:
+    decoded_data = verify_jwt_token(token)
+    if not decoded_data:
+        raise HTTPException(status_code=400, detail="Invalid token")
+    user_id = decoded_data["sub"]
+    user = await user_crud.get_user(session=session, user_id=user_id)
     await user_crud.delete_user(
         session=session,
         user=user,
