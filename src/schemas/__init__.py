@@ -10,8 +10,10 @@ __all__ = (
     "GameSessionUpdatePartial",
     "OperationType",
     "Rating",
+    "Achievement",
 )
 
+from src.schemas.achievements_schemas import Achievement
 from src.schemas.rating_schemas import (
     Rating,
 )
