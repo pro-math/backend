@@ -1,7 +1,10 @@
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from src.schemas import GameSession
 
 
-def check_achievements(
+async def check_achievements(
+    session: AsyncSession,
     game_session: GameSession,
     user_id: int,
 ):

@@ -43,8 +43,8 @@ async def get_user_achievements(
         ):
             chart_statistic.append(
                 Chart(
-                    date=game_session.created_at,
-                    stats=game_session.correct_count / game_session.total_count
+                    date=game_session.created_at.strftime("%Y-%m-%d"),
+                    stats=game_session.correct_count / game_session.total_count * 100
                     if game_mode == GameMode.count_mode
                     else game_session.correct_count,
                 )

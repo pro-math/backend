@@ -27,7 +27,9 @@ async def get_user_rating(
 
 
 async def update_rating(
-    session: AsyncSession, user_id: int, game_session: GameSession
+    session: AsyncSession,
+    user_id: int,
+    game_session: GameSession,
 ) -> None:
     rating = await get_user_rating(
         session,
@@ -42,10 +44,10 @@ async def update_rating(
             if (
                 game_session.correct_count / game_session.total_count
                 > rating.correct_count / rating.game_session.total_count
-                and game_session.duration < rating.duration
             ):
-                rating.duration = game_session.duration
-                rating.game_session_id = game_session.id
+                if game_session.duration < rating.duration:
+                    rating.duration = game_session.duration
+                    rating.game_session_id = game_session.id
         elif game_session.game_mode == GameMode.time_mode:
             if game_session.correct_count > rating.game_session.correct_count:
                 rating.correct_count = game_session.correct_count
