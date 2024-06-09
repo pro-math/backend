@@ -10,7 +10,7 @@ from src.models import Achievement
 async def get_achievements(session: AsyncSession) -> list[Achievement]:
     stmt = select(Achievement).order_by(Achievement.id)
     result: Result = await session.execute(stmt)
-    achievements = result.scalars().all()
+    achievements = result.scalars().unique().all()
     return list(achievements)
 
 

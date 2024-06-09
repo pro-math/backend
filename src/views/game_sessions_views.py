@@ -10,6 +10,7 @@ from src.schemas import (
 )
 from src.views.users_views import oauth2_scheme
 from src.utils.auth import verify_jwt_token
+from src.utils.check_achievements import check_achievements
 
 game_sessions_router = APIRouter(prefix="/game_sessions", tags=["Game sessions"])
 
@@ -31,7 +32,14 @@ async def create_game_session(
         session=session, user_id=user_id, game_session_in=game_session_in
     )
     await rating_crud.update_rating(
-        session=session, user_id=user_id, game_session=game_session
+        session=session,
+        user_id=user_id,
+        game_session=game_session,
+    )
+    await check_achievements(
+        session=session,
+        game_session=game_session,
+        user_id=user_id,
     )
     return game_session
 
