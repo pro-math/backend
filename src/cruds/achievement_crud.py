@@ -19,8 +19,10 @@ async def get_user_achievements(
     session: AsyncSession,
 ) -> list[Achievement]:
     user = await user_crud.get_user(session=session, user_id=user_id)
-    achievements = user.achievements
-    return list(achievements)
+    achievements = []
+    if user:
+        achievements = user.achievements
+    return list(achievements) if achievements else []
 
 
 async def add_achievement_to_user(

@@ -40,12 +40,7 @@ async def get_users_ratings(
             else GameSessionModel.total_count == difficulty,
         )
         .order_by(
-            GameSessionModel.correct_count / GameSessionModel.total_count
-            if game_mode == GameMode.count_mode
-            else GameSessionModel.correct_count.desc(),
-            GameSessionModel.duration.desc()
-            if game_mode == GameMode.count_mode
-            else GameSessionModel.correct_count.desc(),
+            -GameSessionModel.id,
         )
         .limit(limit)
         .offset(offset)
@@ -88,17 +83,19 @@ async def get_ratings(
             RatingModel.game_mode == game_mode,
             RatingModel.examples_category == examples_category,
             RatingModel.math_operations == math_operations,
-            GameSessionModel.duration == difficulty
-            if game_mode == GameMode.time_mode
-            else GameSessionModel.total_count == difficulty,
+            (
+                GameSessionModel.duration == difficulty
+                if game_mode == GameMode.time_mode
+                else GameSessionModel.total_count == difficulty
+            ),
         )
         .order_by(
-            RatingModel.correct_count / GameSessionModel.total_count
+            -RatingModel.correct_count / GameSessionModel.total_count
             if game_mode == GameMode.count_mode
-            else RatingModel.correct_count.desc(),
-            RatingModel.duration.desc()
+            else RatingModel.correct_count,
+            RatingModel.duration
             if game_mode == GameMode.count_mode
-            else RatingModel.correct_count.desc(),
+            else RatingModel.correct_count,
         )
         .limit(limit)
         .offset(offset)
@@ -106,7 +103,6 @@ async def get_ratings(
 
     result = await session.execute(query)
     ratings = result.unique().scalars().all()
-
     return [
         Rating(
             game_mode=rating.game_mode,

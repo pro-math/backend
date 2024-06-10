@@ -26,6 +26,18 @@ async def get_users_game_sessions(
     return list(game_sessions)
 
 
+# /api/v1/ratings/?game_mode=count_mode&examples_category=10&math_operations=%2B&math_operations=%2F&math_operations=-&math_operations=*
+# /api/v1/ratings/?game_mode=count_mode&examples_category=10&math_operations=%2B&math_operations=-&math_operations=%2A&math_operations=%2F
+
+
+async def get_users_total_correct_count(session: AsyncSession, user_id: int) -> int:
+    game_sessions = await get_users_game_sessions(session=session, user_id=user_id)
+    total_correct_count = 0
+    for game_session in game_sessions:
+        total_correct_count += game_session.correct_count
+    return total_correct_count
+
+
 async def get_game_session(
     session: AsyncSession,
     game_session_id: int,
