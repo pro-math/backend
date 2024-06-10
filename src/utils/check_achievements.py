@@ -10,7 +10,6 @@ from src.cruds.achievement_crud import add_achievement_to_user
 from src.models import User, Achievement
 from src.models.achievement_model import user_achievements_table
 from src.schemas import GameSession
-from src.utils.populate_achievements import populate_achievements
 
 
 async def check_achievements(
@@ -20,9 +19,6 @@ async def check_achievements(
 ):
     user_result = await session.execute(select(User).where(User.id == user_id))
     user = user_result.unique().scalars().one_or_none()
-    achievements = await session.execute(select(Achievement))
-    if not achievements:
-        await populate_achievements(session=session)
 
     if not user:
         raise HTTPException(status_code=400, detail="Пользователь не найден")
@@ -151,36 +147,36 @@ async def check_achievements(
         and not has_achievement(12)
     ):
         new_achievements.append(12)
-
-    if (
-        game_session.correct_count / game_session.total_count >= 1.0
-        and not has_achievement(17)
-    ):
-        new_achievements.append(17)
-    if (
-        game_session.correct_count / game_session.total_count >= 0.95
-        and game_session.correct_count >= 40
-        and not has_achievement(31)
-    ):
-        new_achievements.append(31)
-    if (
-        game_session.correct_count / game_session.total_count >= 1.0
-        and game_session.total_count == 10
-        and not has_achievement(22)
-    ):
-        new_achievements.append(22)
-    if (
-        game_session.correct_count / game_session.total_count >= 1.0
-        and game_session.total_count >= 50
-        and not has_achievement(35)
-    ):
-        new_achievements.append(35)
-    if (
-        game_session.correct_count / game_session.total_count >= 1.0
-        and game_session.examples_category == 1000
-        and not has_achievement(32)
-    ):
-        new_achievements.append(32)
+    if game_session.total_count != 0:
+        if (
+            game_session.correct_count / game_session.total_count >= 1.0
+            and not has_achievement(17)
+        ):
+            new_achievements.append(17)
+        if (
+            game_session.correct_count / game_session.total_count >= 0.95
+            and game_session.correct_count >= 40
+            and not has_achievement(31)
+        ):
+            new_achievements.append(31)
+        if (
+            game_session.correct_count / game_session.total_count >= 1.0
+            and game_session.total_count == 10
+            and not has_achievement(22)
+        ):
+            new_achievements.append(22)
+        if (
+            game_session.correct_count / game_session.total_count >= 1.0
+            and game_session.total_count >= 50
+            and not has_achievement(35)
+        ):
+            new_achievements.append(35)
+        if (
+            game_session.correct_count / game_session.total_count >= 1.0
+            and game_session.examples_category == 1000
+            and not has_achievement(32)
+        ):
+            new_achievements.append(32)
 
     if (
         game_session.correct_count >= 10
